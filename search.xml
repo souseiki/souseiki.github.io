@@ -5,8 +5,8 @@
     
     <entry>
       <title>Hexo博客搭建和自动化部署</title>
-      <link href="/2020/03/17/hexo/Hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E5%92%8C%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/"/>
-      <url>/2020/03/17/hexo/Hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E5%92%8C%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/</url>
+      <link href="/undefined/abbrlink.html"/>
+      <url>/undefined/abbrlink.html</url>
       
         <content type="html"><![CDATA[<h1 id="Hexo博客搭建和自动化部署"><a href="#Hexo博客搭建和自动化部署" class="headerlink" title="Hexo博客搭建和自动化部署"></a>Hexo博客搭建和自动化部署</h1><p><img src="/../../img/Hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E5%92%8C%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/Hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E5%92%8C%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2_2020-03-17-14-10-37.png" alt=""><br>Hexo 是一款快速、简洁且高效的博客框架.</p><h2 id="常用插件"><a href="#常用插件" class="headerlink" title="常用插件"></a>常用插件</h2><ul><li>hexo-asset-image<ul><li>解决问题： hexo博客图片的问题在于，markdown文章使用的图片路径和hexo博客发布时的图片路径不一致。通常我们使用markdown书写博客时, 采用的方式是使用 <img src="" alt=""> 格式插入图片，我们希望在生成博客时，可以将图片转换成正确的格式。</li><li>安装： <code>npm install https://github.com/7ym0n/hexo-asset-image --sa</code></li><li>配置：只需要在<code>_config.yml</code> 中配置 <code>post_asset_folder</code> 为 <code>true</code> 即可。</li><li></li></ul></li></ul>]]></content>
       
@@ -30,8 +30,8 @@
     
     <entry>
       <title>Hello World</title>
-      <link href="/2020/03/13/hello-world/"/>
-      <url>/2020/03/13/hello-world/</url>
+      <link href="/undefined/abbrlink.html"/>
+      <url>/undefined/abbrlink.html</url>
       
         <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
       
