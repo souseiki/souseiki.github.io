@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, Shane&#39;s Blog">
+    <meta name="keywords" content="关于路径规划的一些想法, Shane&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | Shane&#39;s Blog</title>
+    <title>关于路径规划的一些想法 | Shane&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -306,7 +306,7 @@
 <script src="/libs/cryptojs/crypto-js.min.js"></script>
 <script>
     (function() {
-        let pwd = '';
+        let pwd = '104120';
         if (pwd && pwd.length > 0) {
             if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
                 alert('密码错误，将返回主页！');
@@ -319,12 +319,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">关于路径规划的一些想法</h1>
                 </div>
             </div>
         </div>
@@ -446,6 +446,15 @@
                 </div>
                 <div class="col s5 right-align">
                     
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/auto-driving/" class="post-category">
+                                auto-driving
+                            </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
 
@@ -453,7 +462,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-03-13
+                    2020-03-26
                 </div>
                 
 
@@ -470,15 +479,21 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class=" language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class=" language-bash"><code class="language-bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class=" language-bash"><code class="language-bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class=" language-bash"><code class="language-bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <h1 id="传统方法的一些瓶颈"><a href="#传统方法的一些瓶颈" class="headerlink" title="传统方法的一些瓶颈"></a>传统方法的一些瓶颈</h1><p>目前，针对结构化道路场景下的路径规划方法基本都是先采样，获得一系列路径；然后再计算每条采样的得到的路径的代价，比如距离障碍物的距离，heading变化率等； 最后选择一个代价最小的路径。 这种方法有很多弊端：</p>
+<ul>
+<li><strong>对环境的信息利用不够充分</strong>。</li>
+<li><strong>采样路径不够智能</strong>。</li>
+<li><strong>轨迹质量评估不够智能</strong>。</li>
+</ul>
+<h1 id="新方法和新思路"><a href="#新方法和新思路" class="headerlink" title="新方法和新思路"></a>新方法和新思路</h1><h2 id="基于逆向强化学习的轨迹评估函数"><a href="#基于逆向强化学习的轨迹评估函数" class="headerlink" title="基于逆向强化学习的轨迹评估函数"></a>基于逆向强化学习的轨迹评估函数</h2><p>基于data-drive的方法，生成一套更优的轨迹评价体系。</p>
+<h2 id="基于GAN的状态空间采样"><a href="#基于GAN的状态空间采样" class="headerlink" title="基于GAN的状态空间采样"></a>基于GAN的状态空间采样</h2><p>基于data-drive的方法，生成一套更优的采样系统。</p>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><h2 id="基于深度强化学习open-space-planner"><a href="#基于深度强化学习open-space-planner" class="headerlink" title="基于深度强化学习open space planner"></a>基于深度强化学习open space planner</h2><ul>
+<li>参考资料：<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/79712897" target="_blank" rel="noopener">动态环境下基于DRL的无人车自适应路径规划方法</a></li>
+<li><a href="https://github.com/RGring/drl_local_planner_ros_stable_baselines" target="_blank" rel="noopener">Applying Deep Reinforcement Learning in the Navigation of Mobile Robots in Static and Dynamic Environments</a></li>
+</ul>
+</li>
+</ul>
 
             </div>
             <hr/>
@@ -494,7 +509,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://shanehan.tech" rel="external nofollow noreferrer">Shane Han</a>
+                    <a href="http://shanehan.tech" rel="external nofollow noreferrer">ShaneHan</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -504,7 +519,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://shanehan.tech/posts/4a17b156/">http://shanehan.tech/posts/4a17b156/</a>
+                    <a href="http://shanehan.tech/posts/baea0bd9/">http://shanehan.tech/posts/baea0bd9/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -517,7 +532,7 @@
                     All articles in this blog are used except for special statements
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     reprint polocy. If reproduced, please indicate source
-                    <a href="http://shanehan.tech" target="_blank">Shane Han</a>
+                    <a href="http://shanehan.tech" target="_blank">ShaneHan</a>
                     !
                 </span>
             </div>
@@ -584,43 +599,35 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/posts/96b0a1fd/">
+                <a href="/posts/3add8ad6/">
                     <div class="card-image">
                         
-                        <img src="/../../img/Hexo博客搭建和自动化部署/Hexo博客搭建和自动化部署_2020-03-17-14-10-37.png" class="responsive-img" alt="Hexo博客搭建和自动化部署">
                         
-                        <span class="card-title">Hexo博客搭建和自动化部署</span>
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="如何创建一个Task">
+                        
+                        <span class="card-title">如何创建一个Task</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Hexo 是一款快速、简洁且高效的博客框架.本篇文章主要介绍Hexo从零搭建并且结合github action实现自动化部署。此外还介绍一下常用插件和相关的使用技巧。
+                            Step 1: 创建task需要的相关文件
+在planning/tasks中的decider或者optimizer中创建对应的task目录，如abreast_decider.
+
+新建源文件，如abreast_decider.cc和abrea
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-17
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-06-11
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Hexo/" class="post-category">
-                                    Hexo
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            ShaneHan
                             
                         </span>
                     </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/hexo/">
-                        <span class="chip bg-color">hexo</span>
-                    </a>
-                    
                 </div>
                 
             </div>
@@ -629,37 +636,36 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                Current&nbsp;<i class="far fa-dot-circle"></i>
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/posts/4a17b156/">
+                <a href="/posts/2defdda0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Blog Planning">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">Blog Planning</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                            This article records the blog todo list.
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-13
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-23
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
-                            Shane Han
+                            ShaneHan
                             
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -794,6 +800,13 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 </main>
 
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
 
 
     <footer class="page-footer bg-color">

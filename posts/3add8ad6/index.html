@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, Shane&#39;s Blog">
+    <meta name="keywords" content="如何创建一个Task, Shane&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | Shane&#39;s Blog</title>
+    <title>如何创建一个Task | Shane&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -319,12 +319,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">如何创建一个Task</h1>
                 </div>
             </div>
         </div>
@@ -453,7 +453,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-03-13
+                    2020-06-11
                 </div>
                 
 
@@ -470,15 +470,169 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class=" language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class=" language-bash"><code class="language-bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class=" language-bash"><code class="language-bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class=" language-bash"><code class="language-bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <h2 id="Step-1-创建task需要的相关文件"><a href="#Step-1-创建task需要的相关文件" class="headerlink" title="Step 1: 创建task需要的相关文件"></a>Step 1: 创建task需要的相关文件</h2><ul>
+<li><p>在<code>planning/tasks</code>中的decider或者optimizer中创建对应的task目录，如<code>abreast_decider</code>.</p>
+</li>
+<li><p>新建源文件，如<code>abreast_decider.cc</code>和<code>abreast_decider.h</code></p>
+<p>  abreast_decider.cc模板:</p>
+<pre><code>
+  #include &quot;modules/planning/tasks/deciders/abreast_decider/abreast_decider.h&quot;
+
+  namespace apollo
+  {
+  namespace planning
+  {
+  using apollo::common::Status;
+
+  AbreastDecider::AbreastDecider(const TaskConfig &amp;config)
+      : Decider(config)
+  {
+      SetName(&quot;AbreastDecider&quot;);
+  }
+
+</code></pre></li>
+</ul>
+<pre><code>Status AbreastDecider::Process(
+    Frame *const frame, ReferenceLineInfo *const reference_line_info)
+{
+    return Status::OK();
+}
+
+}
+}
+```
+---
+
+abreast_decider.h模板:
+
+```
+#ifndef __REINFORCEMENT_LEARNING_DECIDER_H
+#define __REINFORCEMENT_LEARNING_DECIDER_H
+
+#include &quot;modules/planning/proto/decider_config.pb.h&quot;
+#include &quot;modules/planning/tasks/deciders/decider.h&quot;
+#include &quot;modules/planning/common/planning_gflags.h&quot;
+
+
+namespace apollo
+{
+namespace planning
+{
+
+class AbreastDecider : public Decider
+{
+public:
+    explicit AbreastDecider(const TaskConfig &amp;config);
+
+private:
+    common::Status Process(Frame *frame,
+                        ReferenceLineInfo *reference_line_info) override;
+
+};
+} // namespace planning
+} // namespace apollo
+
+#endif
+
+```</code></pre><ul>
+<li><p>新建<code>BUILD</code>文件，用于Bazel编译使用。如下</p>
+<pre><code>  load(&quot;//tools:cpplint.bzl&quot;, &quot;cpplint&quot;)
+
+  package(default_visibility = [&quot;//visibility:public&quot;])
+
+  cc_library(
+      name = &quot;abreast_decider&quot;,
+      srcs = [
+          &quot;abreast_decider.cc&quot;,
+      ],
+      hdrs = [
+          &quot;abreast_decider.h&quot;,
+      ],
+      copts = [&quot;-DMODULE_NAME=\\\&quot;planning\\\&quot;&quot;],
+      deps = [
+          &quot;//modules/planning/tasks/deciders:decider&quot;,
+          &quot;//modules/planning/common:planning_gflags&quot;,
+          &quot;//modules/planning/common:reference_line_info&quot;,
+      ],
+  )
+
+  cpplint()</code></pre></li>
+</ul>
+<h2 id="Step-2-注册task"><a href="#Step-2-注册task" class="headerlink" title="Step 2: 注册task"></a>Step 2: 注册task</h2><ul>
+<li><p>在<code>task_factory.cc</code>中保护对应的头文件，如：</p>
+<pre><code>  #include &quot;modules/planning/tasks/deciders/abreast_decider/abreast_decider.h&quot;</code></pre></li>
+<li><p>注册task进task_factory中。其中修改<code>ABREAST_DECIDER</code>——这是你在planning conf里面调用的名字；<code>AbreastDecider</code>是在你的task源文件中定义的decider类的名字。</p>
+<pre><code>  task_factory_.Register(TaskConfig::ABREAST_DECIDER,
+                          [](const TaskConfig&amp; config) -&gt; Task* {
+                          return new AbreastDecider(config);
+                          });</code></pre></li>
+<li><p>给task_factory 添加依赖。修改<code>modules/planning/tasks/BUILD</code>，给cc_library/deps添加<code>abreast_decider</code>的依赖。如下</p>
+<pre><code>cc_library(
+  name = &quot;task_factory&quot;,
+  srcs = [
+      &quot;task_factory.cc&quot;,
+  ],
+  hdrs = [
+      &quot;task_factory.h&quot;,
+  ],
+  copts = [&quot;-DMODULE_NAME=\\\&quot;planning\\\&quot;&quot;],
+  deps = [
+      &quot;:task&quot;,
+      ...省略...
+      &quot;//modules/planning/tasks/deciders/abreast_decider:abreast_decider&quot;,
+      ...省略...
+  ],
+  )
+</code></pre></li>
+</ul>
+<h2 id="添加task-config"><a href="#添加task-config" class="headerlink" title="添加task config"></a>添加task config</h2><ul>
+<li><p>在<code>modules/planning/proto</code>中创建<code>abreast_decider_config.proto</code>文件。如：</p>
+<pre><code>  syntax = &quot;proto2&quot;;
+
+  package apollo.planning;
+
+  message AbreastDeciderConfig {
+  optional double abreast_time = 1;
+  optional double lateral_area = 2;
+  optional double longitudinal_area = 3;
+  }
+</code></pre></li>
+<li><p>生成<code>proto_library</code>。在<code>modules/planning/proto/BUILD</code>中生成对应的<code>proto_library</code>.如：</p>
+<pre><code>  proto_library(
+      name = &quot;abreast_decider_config_lib&quot;,
+      srcs = [
+          &quot;abreast_decider.proto&quot;,
+      ],
+  )
+</code></pre></li>
+<li><p>在<code>proto_library</code>中添加依赖。如下：</p>
+<pre><code>  proto_library(
+      name = &quot;planning_config_proto_lib&quot;,
+      srcs = [
+          &quot;planning_config.proto&quot;,
+      ],
+      deps = [
+          ...省略...
+          &quot;:abreast_decider_config_lib&quot;
+      ],
+  )</code></pre></li>
+<li><p>在<code>planning_config.pb.txt</code>中添加默认配置。</p>
+<pre><code>  default_task_config: {
+  task_type: ABREAST_DECIDER
+  abreast_decider_config {
+      abreast_time: 60.0
+      lateral_area: 2.0
+      longitudinal_area: 10.0
+  }
+  }</code></pre></li>
+<li><p>在<code>modules/planning/proto/planning_config.proto</code>中添加相关的task信息</p>
+<ul>
+<li><code>import &quot;modules/planning/proto/abreast_decider_config.proto&quot;</code></li>
+<li>添加<code>TaskType</code>： ABREAST_DECIDER = 22</li>
+<li>添加<code>task_config</code>： AbreastDeciderConfig abreast_decider_config = 18;</li>
+</ul>
+</li>
+</ul>
 
             </div>
             <hr/>
@@ -494,7 +648,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://shanehan.tech" rel="external nofollow noreferrer">Shane Han</a>
+                    <a href="http://shanehan.tech" rel="external nofollow noreferrer">ShaneHan</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -504,7 +658,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://shanehan.tech/posts/4a17b156/">http://shanehan.tech/posts/4a17b156/</a>
+                    <a href="http://shanehan.tech/posts/3add8ad6/">http://shanehan.tech/posts/3add8ad6/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -517,7 +671,7 @@
                     All articles in this blog are used except for special statements
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     reprint polocy. If reproduced, please indicate source
-                    <a href="http://shanehan.tech" target="_blank">Shane Han</a>
+                    <a href="http://shanehan.tech" target="_blank">ShaneHan</a>
                     !
                 </span>
             </div>
@@ -580,48 +734,42 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/posts/96b0a1fd/">
+                <a href="/posts/3add8ad6/">
                     <div class="card-image">
                         
-                        <img src="/../../img/Hexo博客搭建和自动化部署/Hexo博客搭建和自动化部署_2020-03-17-14-10-37.png" class="responsive-img" alt="Hexo博客搭建和自动化部署">
                         
-                        <span class="card-title">Hexo博客搭建和自动化部署</span>
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="如何创建一个Task">
+                        
+                        <span class="card-title">如何创建一个Task</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Hexo 是一款快速、简洁且高效的博客框架.本篇文章主要介绍Hexo从零搭建并且结合github action实现自动化部署。此外还介绍一下常用插件和相关的使用技巧。
+                            Step 1: 创建task需要的相关文件
+在planning/tasks中的decider或者optimizer中创建对应的task目录，如abreast_decider.
+
+新建源文件，如abreast_decider.cc和abrea
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-17
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-11
+                            </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Hexo/" class="post-category">
-                                    Hexo
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            ShaneHan
                             
                         </span>
                     </div>
                 </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/hexo/">
-                        <span class="chip bg-color">hexo</span>
-                    </a>
-                    
-                </div>
+
                 
             </div>
         </div>
@@ -629,37 +777,40 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                Current&nbsp;<i class="far fa-dot-circle"></i>
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/posts/4a17b156/">
+                <a href="/posts/baea0bd9/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="关于路径规划的一些想法">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">关于路径规划的一些想法</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                            Some ideas for Motion Planning
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-13
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-26
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Shane Han
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/auto-driving/" class="post-category">
+                                    auto-driving
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -794,6 +945,13 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 </main>
 
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
 
 
     <footer class="page-footer bg-color">

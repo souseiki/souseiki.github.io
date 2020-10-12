@@ -303,6 +303,19 @@
 </header>
 
     
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
 
 
 
@@ -483,6 +496,12 @@
 </ul>
 </li>
 </ul>
+<h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><ul>
+<li><a href="https://colorhunt.co/" target="_blank" rel="noopener">网站配色</a>: 漂亮炫酷的配色网站</li>
+</ul>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li><a href="https://siriusq.top/Hexo-Next-7-7-%E5%8F%8C%E8%AF%AD%E5%88%87%E6%8D%A2.html" target="_blank" rel="noopener">双语bolg</a>: 添加中英文切换按钮</li>
+</ul>
 
             </div>
             <hr/>
@@ -588,49 +607,36 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/posts/96b0a1fd/">
+                <a href="/posts/2defdda0/">
                     <div class="card-image">
                         
-                        <img src="/../../img/Hexo博客搭建和自动化部署/Hexo博客搭建和自动化部署_2020-03-17-14-10-37.png" class="responsive-img" alt="Hexo博客搭建和自动化部署">
                         
-                        <span class="card-title">Hexo博客搭建和自动化部署</span>
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Blog Planning">
+                        
+                        <span class="card-title">Blog Planning</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Hexo 是一款快速、简洁且高效的博客框架.本篇文章主要介绍Hexo从零搭建并且结合github action实现自动化部署。此外还介绍一下常用插件和相关的使用技巧。
+                            This article records the blog todo list.
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-17
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-23
+                        </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Hexo/" class="post-category">
-                                    Hexo
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            ShaneHan
                             
                         </span>
                     </div>
-                </div>
-
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/hexo/">
-                        <span class="chip bg-color">hexo</span>
-                    </a>
-                    
                 </div>
                 
             </div>
@@ -830,13 +836,13 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             
             <span id="busuanzi_container_site_pv">
                 |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
+                    class="yellow-color"></span>&nbsp;次
             </span>
             
             
             <span id="busuanzi_container_site_uv">
                 |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
+                    class="yellow-color"></span>&nbsp;人
             </span>
             
             <br>
