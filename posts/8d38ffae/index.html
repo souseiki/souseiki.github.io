@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="如何创建一个Task, Shane&#39;s Blog">
+    <meta name="keywords" content="C++反汇编特征记录, Shane&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>如何创建一个Task | Shane&#39;s Blog</title>
+    <title>C++反汇编特征记录 | Shane&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">如何创建一个Task</h1>
+                    <h1 class="description center-align post-title">C++反汇编特征记录</h1>
                 </div>
             </div>
         </div>
@@ -443,7 +443,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-06-11
+                    2021-02-02
                 </div>
                 
 
@@ -464,167 +464,102 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Step-1-创建task需要的相关文件"><a href="#Step-1-创建task需要的相关文件" class="headerlink" title="Step 1: 创建task需要的相关文件"></a>Step 1: 创建task需要的相关文件</h2><ul>
-<li><p>在<code>planning/tasks</code>中的decider或者optimizer中创建对应的task目录，如<code>abreast_decider</code>.</p>
+                <p>#1. 三目运算符</p>
+<h2 id="1-1-无优化版："><a href="#1-1-无优化版：" class="headerlink" title="1.1 无优化版："></a>1.1 无优化版：</h2><ul>
+<li>特征：<pre class=" language-xxx1"><code class="language-xxx1">cmp xxx1,A
+jxx xxx3
+xxx B xx
+jmp xxx4
+xx C xx</code></pre>
 </li>
-<li><p>新建源文件，如<code>abreast_decider.cc</code>和<code>abreast_decider.h</code></p>
-<p>  abreast_decider.cc模板:</p>
-<pre><code>
-  #include &quot;modules/planning/tasks/deciders/abreast_decider/abreast_decider.h&quot;
-
-  namespace apollo
-  {
-  namespace planning
-  {
-  using apollo::common::Status;
-
-  AbreastDecider::AbreastDecider(const TaskConfig &amp;config)
-      : Decider(config)
-  {
-      SetName(&quot;AbreastDecider&quot;);
-  }
-
-</code></pre></li>
+<li>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-16-52-53.png" alt=""><h2 id="1-2-优化方案1："><a href="#1-2-优化方案1：" class="headerlink" title="1.2 优化方案1："></a>1.2 优化方案1：</h2></li>
+<li>特征：表达式1为简单比较，而表达式2和表达3两者的差值等于1；<pre><code>setne al</code></pre></li>
+<li>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-16-30-23.png" alt=""></li>
 </ul>
-<pre><code>Status AbreastDecider::Process(
-    Frame *const frame, ReferenceLineInfo *const reference_line_info)
-{
-    return Status::OK();
-}
-
-}
-}
-```
----
-
-abreast_decider.h模板:
-
-```
-#ifndef __REINFORCEMENT_LEARNING_DECIDER_H
-#define __REINFORCEMENT_LEARNING_DECIDER_H
-
-#include &quot;modules/planning/proto/decider_config.pb.h&quot;
-#include &quot;modules/planning/tasks/deciders/decider.h&quot;
-#include &quot;modules/planning/common/planning_gflags.h&quot;
-
-
-namespace apollo
-{
-namespace planning
-{
-
-class AbreastDecider : public Decider
-{
-public:
-    explicit AbreastDecider(const TaskConfig &amp;config);
-
-private:
-    common::Status Process(Frame *frame,
-                        ReferenceLineInfo *reference_line_info) override;
-
-};
-} // namespace planning
-} // namespace apollo
-
-#endif
-
-```</code></pre><ul>
-<li><p>新建<code>BUILD</code>文件，用于Bazel编译使用。如下</p>
-<pre><code>  load(&quot;//tools:cpplint.bzl&quot;, &quot;cpplint&quot;)
-
-  package(default_visibility = [&quot;//visibility:public&quot;])
-
-  cc_library(
-      name = &quot;abreast_decider&quot;,
-      srcs = [
-          &quot;abreast_decider.cc&quot;,
-      ],
-      hdrs = [
-          &quot;abreast_decider.h&quot;,
-      ],
-      copts = [&quot;-DMODULE_NAME=\\\&quot;planning\\\&quot;&quot;],
-      deps = [
-          &quot;//modules/planning/tasks/deciders:decider&quot;,
-          &quot;//modules/planning/common:planning_gflags&quot;,
-          &quot;//modules/planning/common:reference_line_info&quot;,
-      ],
-  )
-
-  cpplint()</code></pre></li>
+<h2 id="1-3-优化方案2："><a href="#1-3-优化方案2：" class="headerlink" title="1.3 优化方案2："></a>1.3 优化方案2：</h2><ul>
+<li>特征： xxx1 == A? B:C<pre><code>cmp xxx1, A
+mov xxx3， B
+mov xxx4, C
+cmovcc xxx3, xxx4</code></pre></li>
+<li>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-16-47-25.png" alt=""></li>
 </ul>
-<h2 id="Step-2-注册task"><a href="#Step-2-注册task" class="headerlink" title="Step 2: 注册task"></a>Step 2: 注册task</h2><ul>
-<li><p>在<code>task_factory.cc</code>中保护对应的头文件，如：</p>
-<pre><code>  #include &quot;modules/planning/tasks/deciders/abreast_decider/abreast_decider.h&quot;</code></pre></li>
-<li><p>注册task进task_factory中。其中修改<code>ABREAST_DECIDER</code>——这是你在planning conf里面调用的名字；<code>AbreastDecider</code>是在你的task源文件中定义的decider类的名字。</p>
-<pre><code>  task_factory_.Register(TaskConfig::ABREAST_DECIDER,
-                          [](const TaskConfig&amp; config) -&gt; Task* {
-                          return new AbreastDecider(config);
-                          });</code></pre></li>
-<li><p>给task_factory 添加依赖。修改<code>modules/planning/tasks/BUILD</code>，给cc_library/deps添加<code>abreast_decider</code>的依赖。如下</p>
-<pre><code>cc_library(
-  name = &quot;task_factory&quot;,
-  srcs = [
-      &quot;task_factory.cc&quot;,
-  ],
-  hdrs = [
-      &quot;task_factory.h&quot;,
-  ],
-  copts = [&quot;-DMODULE_NAME=\\\&quot;planning\\\&quot;&quot;],
-  deps = [
-      &quot;:task&quot;,
-      ...省略...
-      &quot;//modules/planning/tasks/deciders/abreast_decider:abreast_decider&quot;,
-      ...省略...
-  ],
-  )
+<h1 id="2-if…else…语句"><a href="#2-if…else…语句" class="headerlink" title="2. if…else…语句"></a>2. if…else…语句</h1><h2 id="2-1-if单分支，无优化"><a href="#2-1-if单分支，无优化" class="headerlink" title="2.1 if单分支，无优化"></a>2.1 if单分支，无优化</h2><ul>
+<li><p>特征：if（A） { B }</p>
+<pre><code>  cmp A
+  jxx  B_end
+  B
 </code></pre></li>
+<li><p>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-00-07.png" alt=""></p>
+<h2 id="2-1-if-else双分支，无优化"><a href="#2-1-if-else双分支，无优化" class="headerlink" title="2.1 if..else双分支，无优化"></a>2.1 if..else双分支，无优化</h2></li>
+<li><p>特征：if（A） { B } else {C}</p>
+<pre><code>  jxx ELSE_BEGIN；该地址为else语句块的首地址
+  IF_BEGIN：
+  ……；if语句块内的执行代码
+  IF_END：
+  jmp ELSE_END；跳转到else语句块的结束地址
+  ELSE_BEGIN：
+  ……；else语句块内的执行代码
+  ELSE_END：
+</code></pre></li>
+<li><p>实例：<br>  <img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-04-54.png" alt=""></p>
+<h2 id="2-3-if-else-if…else-多分支，无优化"><a href="#2-3-if-else-if…else-多分支，无优化" class="headerlink" title="2.3 if..else if…else 多分支，无优化"></a>2.3 if..else if…else 多分支，无优化</h2></li>
+<li><p>特征：</p>
+<pre><code>  cmp；会影响标志位的指令
+  jxx ELSE_IF_BEGIN；跳转到下一条else if语句块的首地址
+  IF_BEGIN：
+  ……；if语句块内的执行代码
+  IF_END：
+  jmp END；跳转到多分支结构的结尾地址
+  ELSE_IF_BEGIN：；else if语句块的起始地址
+  ；可影响标志位的指令
+  jxx ELSE_BEGIN；跳转到else分支语句块的首地址
+  ……；else if语句块内的执行代码
+  IF_ELSE_END：；else if结尾处
+  jmp END；跳转到多分支结构的结尾地址
+  ELSE_BEGIN：；else语句块的起始地址
+  ……；else语句块内的执行代码
+  END：；多分支结构的结尾处
+  ……</code></pre></li>
+<li><p>实例：<br>  <img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-13-42.png" alt=""></p>
+</li>
 </ul>
-<h2 id="添加task-config"><a href="#添加task-config" class="headerlink" title="添加task config"></a>添加task config</h2><ul>
-<li><p>在<code>modules/planning/proto</code>中创建<code>abreast_decider_config.proto</code>文件。如：</p>
-<pre><code>  syntax = &quot;proto2&quot;;
-
-  package apollo.planning;
-
-  message AbreastDeciderConfig {
-  optional double abreast_time = 1;
-  optional double lateral_area = 2;
-  optional double longitudinal_area = 3;
-  }
-</code></pre></li>
-<li><p>生成<code>proto_library</code>。在<code>modules/planning/proto/BUILD</code>中生成对应的<code>proto_library</code>.如：</p>
-<pre><code>  proto_library(
-      name = &quot;abreast_decider_config_lib&quot;,
-      srcs = [
-          &quot;abreast_decider.proto&quot;,
-      ],
-  )
-</code></pre></li>
-<li><p>在<code>proto_library</code>中添加依赖。如下：</p>
-<pre><code>  proto_library(
-      name = &quot;planning_config_proto_lib&quot;,
-      srcs = [
-          &quot;planning_config.proto&quot;,
-      ],
-      deps = [
-          ...省略...
-          &quot;:abreast_decider_config_lib&quot;
-      ],
-  )</code></pre></li>
-<li><p>在<code>planning_config.pb.txt</code>中添加默认配置。</p>
-<pre><code>  default_task_config: {
-  task_type: ABREAST_DECIDER
-  abreast_decider_config {
-      abreast_time: 60.0
-      lateral_area: 2.0
-      longitudinal_area: 10.0
-  }
-  }</code></pre></li>
-<li><p>在<code>modules/planning/proto/planning_config.proto</code>中添加相关的task信息</p>
-<ul>
-<li><code>import &quot;modules/planning/proto/abreast_decider_config.proto&quot;</code></li>
-<li>添加<code>TaskType</code>： ABREAST_DECIDER = 22</li>
-<li>添加<code>task_config</code>： AbreastDeciderConfig abreast_decider_config = 18;</li>
+<h2 id="if-多分支语句优化版："><a href="#if-多分支语句优化版：" class="headerlink" title="if 多分支语句优化版："></a>if 多分支语句优化版：</h2><ul>
+<li>特征： <ul>
+<li>使用test 代替cmp</li>
+<li>尽量削减分支</li>
 </ul>
+</li>
+<li>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-22-35.png" alt=""><h1 id="其他特征"><a href="#其他特征" class="headerlink" title="其他特征"></a>其他特征</h1></li>
+</ul>
+<h1 id="Switch语句"><a href="#Switch语句" class="headerlink" title="Switch语句"></a>Switch语句</h1><h2 id="switch只有三条分支无优化版"><a href="#switch只有三条分支无优化版" class="headerlink" title="switch只有三条分支无优化版"></a>switch只有三条分支无优化版</h2><ul>
+<li><p>特征：</p>
+<pre><code>  mov reg, mem；取出switch中考察的变量
+  ；影响标志位的指令
+  jxx xxxx；跳转到对应case语句块的首地址处
+  ；影响标志位的指令
+  jxx xxxx
+  ；影响标志位的指令
+  jxx xxxx
+  jmp END；跳转到switch的结尾地址处
+  ……；case语句块的首地址
+  jmp END；case语句块结束，有break则产生这个jmp
+  ……；case语句块的首地址
+  jmp END；case语句块的结束，有break则产生这个jmp
+  ……；case语句块的首地址
+  jmp END；case语句块结束，有break则产生这个jmp
+  END：；switch结尾</code></pre></li>
+<li><p>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-29-35.png" alt=""></p>
+</li>
+<li><p>注意：这种情况下switch和if…else if…else的区别。</p>
+</li>
+</ul>
+<h2 id="1-进入函数，判断参数是否为0"><a href="#1-进入函数，判断参数是否为0" class="headerlink" title="1. 进入函数，判断参数是否为0"></a>1. 进入函数，判断参数是否为0</h2><ul>
+<li><p>特征：</p>
+<pre><code>  test xxx,xxx
+  je xxx</code></pre></li>
+<li><p>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-15-27-15.png" alt=""></p>
+</li>
+<li><p>注意：这是编译器进行速度优化（/O2）后的写法，不优化版是直接使用cmp对比</p>
 </li>
 </ul>
 
@@ -653,7 +588,7 @@ private:
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://shanehan.tech/posts/3add8ad6/">http://shanehan.tech/posts/3add8ad6/</a>
+                    <a href="http://shanehan.tech/posts/8d38ffae/">http://shanehan.tech/posts/8d38ffae/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -858,9 +793,48 @@ private:
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/posts/8d38ffae/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="C++反汇编特征记录">
+                        
+                        <span class="card-title">C++反汇编特征记录</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            ShaneHan
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/posts/4a17b156/">
                     <div class="card-image">
@@ -878,54 +852,13 @@ private:
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
                             Shane Han
-                            
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/posts/baea0bd9/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="关于路径规划的一些想法">
-                        
-                        <span class="card-title">关于路径规划的一些想法</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            Some ideas for Motion Planning
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-26
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/auto-driving/" class="post-category">
-                                    auto-driving
-                                </a>
-                            
                             
                         </span>
                     </div>

@@ -1917,6 +1917,7 @@ footer .copy-right {
 .top-scroll .btn-floating i {
     line-height: 48px;
     font-size: 1.8rem;
+    color: #000000;
 }
 
 @media screen and (min-width: 368px) and (max-width: 767px) {
