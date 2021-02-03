@@ -481,8 +481,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>#1. 三目运算符</p>
-<h2 id="1-1-无优化版："><a href="#1-1-无优化版：" class="headerlink" title="1.1 无优化版："></a>1.1 无优化版：</h2><ul>
+                <h1 id="1-三目运算符"><a href="#1-三目运算符" class="headerlink" title="1. 三目运算符"></a>1. 三目运算符</h1><h2 id="1-1-无优化版："><a href="#1-1-无优化版：" class="headerlink" title="1.1 无优化版："></a>1.1 无优化版：</h2><ul>
 <li>特征：<pre class=" language-xxx1"><code class="language-xxx1">cmp xxx1,A
 jxx xxx3
 xxx B xx
@@ -548,14 +547,14 @@ cmovcc xxx3, xxx4</code></pre></li>
 </li>
 <li>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-22-35.png" alt=""></li>
 </ul>
-<h1 id="3-Switch语句"><a href="#3-Switch语句" class="headerlink" title="3 Switch语句"></a>3 Switch语句</h1><h2 id="3-1-switch只有三条分支无优化版"><a href="#3-1-switch只有三条分支无优化版" class="headerlink" title="3.1 switch只有三条分支无优化版"></a>3.1 switch只有三条分支无优化版</h2><ul>
-<li><p>特征：</p>
+<h1 id="3-Switch语句"><a href="#3-Switch语句" class="headerlink" title="3 Switch语句"></a>3 Switch语句</h1><h2 id="3-1-switch分支较少"><a href="#3-1-switch分支较少" class="headerlink" title="3.1 switch分支较少"></a>3.1 switch分支较少</h2><ul>
+<li><p>特征：三条分支或者更少的情况下（default算一条分支）性能与if else性能类似。</p>
 <pre><code>  mov reg, mem；取出switch中考察的变量
-  ；影响标志位的指令
+  cmp 或其他影响标志位的指令
   jxx xxxx；跳转到对应case语句块的首地址处
-  ；影响标志位的指令
+  cmp 或其他影响标志位的指令
   jxx xxxx
-  ；影响标志位的指令
+  cmp 或其他影响标志位的指令
   jxx xxxx
   jmp END；跳转到switch的结尾地址处
   ……；case语句块的首地址
@@ -569,9 +568,45 @@ cmovcc xxx3, xxx4</code></pre></li>
 </li>
 <li><p>注意：</p>
 <ul>
-<li>这种情况下switch和if…else if…else的区别。<h1 id="4-其他特征"><a href="#4-其他特征" class="headerlink" title="4. 其他特征"></a>4. 其他特征</h1><h2 id="4-1-进入函数，判断参数是否为0"><a href="#4-1-进入函数，判断参数是否为0" class="headerlink" title="4.1 进入函数，判断参数是否为0"></a>4.1 进入函数，判断参数是否为0</h2></li>
+<li>这种情况下switch和if…else if…else的区别。</li>
 </ul>
 </li>
+</ul>
+<h2 id="3-2-switch分支较多，case后的值连续"><a href="#3-2-switch分支较多，case后的值连续" class="headerlink" title="3.2 switch分支较多，case后的值连续"></a>3.2 switch分支较多，case后的值连续</h2><ul>
+<li><p>特征：</p>
+<ul>
+<li>生产一张大表，按case值大小顺序存储case后的语句块对应的地址。</li>
+<li>switch值-最小的case值，就可以得到case后的语句块地址在表中的偏移，从而快速进入对应的case处理</li>
+</ul>
+</li>
+<li><p>实例<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-03-14-40-43.png" alt=""></p>
+<h2 id="3-3-switch分支较多，case后的值连续，但是有少量空缺"><a href="#3-3-switch分支较多，case后的值连续，但是有少量空缺" class="headerlink" title="3.3 switch分支较多，case后的值连续，但是有少量空缺"></a>3.3 switch分支较多，case后的值连续，但是有少量空缺</h2></li>
+<li><p>特征：</p>
+<ul>
+<li>还是生产一张大表，按case值大小顺序存储各个case后的语句块地址</li>
+<li>case空缺处用default语句块填充。</li>
+</ul>
+</li>
+<li><p>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-03-16-27-00.png" alt=""></p>
+<h2 id="3-4-switch分支较多，case后的值连续，但是有大量空缺"><a href="#3-4-switch分支较多，case后的值连续，但是有大量空缺" class="headerlink" title="3.4 switch分支较多，case后的值连续，但是有大量空缺"></a>3.4 switch分支较多，case后的值连续，但是有大量空缺</h2></li>
+<li><p>特征</p>
+<ul>
+<li>生成两张表，表一：存储各个case分支处理的地址；表二：按case值顺序存储各个case值对应的处理函数在地址表中的序号。</li>
+<li>switch值-最小的case值，就可以得到case后的处理函数地址在表一的偏移，再通过这个序号，可以在表二中快速找到对应的case分支处理。</li>
+</ul>
+</li>
+<li><p>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-03-15-28-46.png" alt=""></p>
+</li>
+</ul>
+<h2 id="3-2-总结"><a href="#3-2-总结" class="headerlink" title="3.2 总结"></a>3.2 总结</h2><ul>
+<li>何时生成大表？ 分支较多，且case的值连续。</li>
+<li>case分支顺序打乱，观察顺序是否会影响生成大表？</li>
+<li>观察值较大时是否生成大表？值大小不影响，只要连续就行</li>
+<li>大表空缺位置的处理？填充default分支</li>
+<li>何时生成小表？ case值连续，但是中间空缺较多，比如case值是1,5,6,7 14</li>
+<li>Case值不连续？ switch变得与if-else差不多。</li>
+</ul>
+<h1 id="4-其他特征"><a href="#4-其他特征" class="headerlink" title="4. 其他特征"></a>4. 其他特征</h1><h2 id="4-1-进入函数，判断参数是否为0"><a href="#4-1-进入函数，判断参数是否为0" class="headerlink" title="4.1 进入函数，判断参数是否为0"></a>4.1 进入函数，判断参数是否为0</h2><ul>
 <li><p>特征：</p>
 <pre><code>  test xxx,xxx
   je xxx</code></pre></li>
