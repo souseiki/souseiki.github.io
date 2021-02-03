@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, Shane&#39;s Blog">
+    <meta name="keywords" content="结构体对齐, Shane&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | Shane&#39;s Blog</title>
+    <title>结构体对齐 | Shane&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">结构体对齐</h1>
                 </div>
             </div>
         </div>
@@ -464,15 +464,110 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class=" language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class=" language-bash"><code class="language-bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class=" language-bash"><code class="language-bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class=" language-bash"><code class="language-bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <h1 id="1-什么是结构体对齐"><a href="#1-什么是结构体对齐" class="headerlink" title="1. 什么是结构体对齐"></a>1. 什么是结构体对齐</h1><p>结构体的大小（sizeof）不一定是结构体成员的大小（sizeof）的累加值。</p>
+<h1 id="2-为什么要结构体对齐"><a href="#2-为什么要结构体对齐" class="headerlink" title="2. 为什么要结构体对齐"></a>2. 为什么要结构体对齐</h1><p>牺牲空间，优化效率的做法。32位机器中，访问32位的变量最快。</p>
+<h1 id="3-如何结构体对齐"><a href="#3-如何结构体对齐" class="headerlink" title="3. 如何结构体对齐"></a>3. 如何结构体对齐</h1><ul>
+<li>原则一：数据成员对齐规则：结构的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从该成员大小的整数倍开始(比如int在32位机为４字节，则要从4的整数倍地址开始存储).参考<a href="#Example1">案例一</a></li>
+<li>原则二：结构体的总大小，也就是sizeof的结果，必须是其内部最大成员的整数倍，不足的要补齐。参考<a href="#Example2">案例二</a></li>
+<li>原则四：对齐参数如果比结构体成员的sizeof值小，该成员的偏移量应该以此值为准.也就是说，结构体成员的偏移量应该取二者的最小值。参考<a href="#Example3">案例三</a></li>
+</ul>
+<h1 id="4-案例分析"><a href="#4-案例分析" class="headerlink" title="4. 案例分析"></a>4. 案例分析</h1><ul>
+<li><p><span id="Example1">案例1</span>：</p>
+<ul>
+<li>结构体：<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> Test
+<span class="token punctuation">{</span>
+    <span class="token keyword">char</span> a<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> b<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li>结构体内存图:<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-10-49-22.png" alt=""></li>
+</ul>
+</li>
+<li><p><span id="Example2">案例2</span>：</p>
+<ul>
+<li>结构体：<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> Test
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> a<span class="token punctuation">;</span>
+    __int64 b<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> c<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li>结构体内存图:<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-10-53-22.png" alt=""></li>
+</ul>
+</li>
+<li><p><span id="Example3">案例3</span>：</p>
+<ul>
+<li>结构体：<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> Test
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> a<span class="token punctuation">;</span>
+    __int64 b<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> c<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> d<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li>结构体内存图:<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-10-59-38.png" alt=""></li>
+<li>解析： <ul>
+<li>VS2019默认对齐参数是8。</li>
+<li>根据原则四，sizeof(__int64) = 对齐参数，所以偏移量=8，那么b的其实位置是(a + 4), 因为a占四个字节，再加4个字节，偏移量就是8了。</li>
+<li>根据原则四，sizeof(char) &lt; 对齐参数，所以偏移量=1，所以c的其实位置是(b(8)后), 因为b占8个字节，偏移量已经超过1了。</li>
+<li>根据原则四，sizeof(char) &lt; 对齐参数，所以偏移量=1，所以d的其实位置是(c(1)后)，因为c占1个字节，偏移量就是1了。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="5-补充"><a href="#5-补充" class="headerlink" title="5. 补充"></a>5. 补充</h1><ul>
+<li><p>结构体定义的时候，<strong>应该按照数据类型由小到大的顺序进行书写</strong>。这样最节约内存。</p>
+</li>
+<li><p>对齐参数的设置(#pragma pack):</p>
+<ul>
+<li><p>基本用法：</p>
+<pre><code>#pragma pack(n)
+结构体。。。
+#pragma pack()
+
+n为字节对齐数，其取值为1、2、4、8，默认是8。
+对齐参数如果比结构体成员的sizeof值小，该成员的偏移量应该以此值为准.也就是说，结构体成员的偏移量应该取二者的最小值</code></pre></li>
+<li><p>实例：</p>
+<ul>
+<li>结构体结构源码：<pre class=" language-c++"><code class="language-c++">#pragma pack(n)
+struct Test
+{
+    int a ;
+    __int64 b ;
+    char c ;
+};
+#pragma pack()
+</code></pre>
+</li>
+</ul>
+<p>```</p>
+<ul>
+<li>当n=8,即对齐参数为8<ul>
+<li>内存结构图：<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-11-10-24.png" alt=""></li>
+<li>解析：<ul>
+<li>根据原则四，sizeof(__int64) = 对齐参数，所以偏移量=8，那么b的其实位置是(a + 4), 因为a占四个字节，再加4个字节，偏移量就是8了。</li>
+<li>根据原则四，sizeof(char) &lt; 对齐参数，所以偏移量=1，所以c的其实位置是(b(8)后), 因为b占8个字节，偏移量已经超过1了。</li>
+<li>根据原则四，sizeof(char) &lt; 对齐参数，所以偏移量=1，所以d的其实位置是(c(1)后)，因为c占1个字节，偏移量就是1了。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>当n=4,即对齐参数为4<ul>
+<li>内存结构图：<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-11-12-47.png" alt=""></li>
+<li>解析：<ul>
+<li>根据原则四，sizeof(__int64) &lt; 对齐参数4，所以偏移量=4，那么b的其实位置是(a(4)后), 因为a占四个字节，偏移量已经是4了。</li>
+<li>根据原则四，sizeof(char) &lt; 对齐参数4，所以偏移量=1，所以c的其实位置是(b(8)后), 因为b占8个字节，偏移量已经超过1了。</li>
+<li>根据原则四，sizeof(char) &lt; 对齐参数4，所以偏移量=1，所以d的其实位置是(c(1)后)，因为c占1个字节，偏移量就是1了。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
                 
             </div>
@@ -489,7 +584,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">Shane Han</a>
+                    <a href="/about" rel="external nofollow noreferrer">ShaneHan</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -499,7 +594,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://shanehan.tech/posts/4a17b156/">http://shanehan.tech/posts/4a17b156/</a>
+                    <a href="http://shanehan.tech/posts/6aac47f4/">http://shanehan.tech/posts/6aac47f4/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -512,7 +607,7 @@
                     All articles in this blog are used except for special statements
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     reprint polocy. If reproduced, please indicate source
-                    <a href="/about" target="_blank">Shane Han</a>
+                    <a href="/about" target="_blank">ShaneHan</a>
                     !
                 </span>
             </div>
@@ -704,9 +799,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/posts/6aac47f4/">
                     <div class="card-image">
@@ -724,9 +820,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-02-03
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-03
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -735,6 +831,7 @@
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
@@ -745,13 +842,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/posts/8d38ffae/">
+                <a href="/posts/4a17b156/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="C++反汇编特征记录">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
                         
-                        <span class="card-title">C++反汇编特征记录</span>
+                        <span class="card-title">Hello World</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -762,12 +859,12 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-03
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
-                            ShaneHan
+                            Shane Han
                             
                         </span>
                     </div>
