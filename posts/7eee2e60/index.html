@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="结构体对齐, Shane&#39;s Blog">
+    <meta name="keywords" content="常见反汇编代码块, Shane&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>结构体对齐 | Shane&#39;s Blog</title>
+    <title>常见反汇编代码块 | Shane&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">结构体对齐</h1>
+                    <h1 class="description center-align post-title">常见反汇编代码块</h1>
                 </div>
             </div>
         </div>
@@ -431,12 +431,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/C-C/">
-                                <span class="chip bg-color">C/C++</span>
-                            </a>
-                        
-                            <a href="/tags/Interview/">
-                                <span class="chip bg-color">Interview</span>
+                            <a href="/tags/reversing/">
+                                <span class="chip bg-color">reversing</span>
                             </a>
                         
                     </div>
@@ -481,108 +477,43 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-什么是结构体对齐"><a href="#1-什么是结构体对齐" class="headerlink" title="1. 什么是结构体对齐"></a>1. 什么是结构体对齐</h1><p>结构体的大小（sizeof）不一定是结构体成员的大小（sizeof）的累加值。</p>
-<h1 id="2-为什么要结构体对齐"><a href="#2-为什么要结构体对齐" class="headerlink" title="2. 为什么要结构体对齐"></a>2. 为什么要结构体对齐</h1><p>牺牲空间，优化效率的做法。32位机器中，访问32位的变量最快。</p>
-<h1 id="3-如何结构体对齐"><a href="#3-如何结构体对齐" class="headerlink" title="3. 如何结构体对齐"></a>3. 如何结构体对齐</h1><ul>
-<li>原则一：数据成员对齐规则：结构的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员存储的起始位置要从该成员大小的整数倍开始(比如int在32位机为４字节，则要从4的整数倍地址开始存储).参考<a href="#Example1">案例一</a></li>
-<li>原则二：结构体的总大小，也就是sizeof的结果，必须是其内部最大成员的整数倍，不足的要补齐。参考<a href="#Example2">案例二</a></li>
-<li>原则四：对齐参数如果比结构体成员的sizeof值小，该成员的偏移量应该以此值为准.也就是说，结构体成员的偏移量应该取二者的最小值。参考<a href="#Example3">案例三</a></li>
-</ul>
-<h1 id="4-案例分析"><a href="#4-案例分析" class="headerlink" title="4. 案例分析"></a>4. 案例分析</h1><ul>
-<li><p><span id="Example1">案例1</span>：</p>
+                <h1 id="计算字符串长度"><a href="#计算字符串长度" class="headerlink" title="计算字符串长度"></a>计算字符串长度</h1><ul>
+<li><p>特征： <code>repne scas byte ptr es:[edi]</code></p>
+</li>
+<li><p>代码块：</p>
+<pre class=" language-x86asm"><code class="language-x86asm">  00406930  /$  89FA          mov     edx, edi    ;备份edi
+  00406932  |.  89C7          mov     edi, eax    ;edi里为存放的字符串
+  00406934  |.  B9 FFFFFFFF   mov     ecx, -1     ;ecx放入-1，0xffff,最大值
+  00406939  |.  30C0          xor     al, al      ;al置0，字符串末尾就是0
+  0040693B  |.  F2:AE         repne   scas byte ptr es:[edi] ;从[edi]开始位置开始找al（遍历字符串），每循环一次cx-1
+  0040693D  |.  B8 FEFFFFFF   mov     eax, -2 ;由于cx末尾多减了一次，因此要用-2来减去得到真正的长度
+  00406942  |.  29C8          sub     eax, ecx
+  00406944  |.  89D7          mov     edi, edx    ;恢复edi</code></pre>
+</li>
+<li><p>代码块解释： </p>
 <ul>
-<li>结构体：<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> Test
-<span class="token punctuation">{</span>
-    <span class="token keyword">char</span> a<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> b<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<li><p>repne命令：</p>
+<table>
+<thead>
+<tr>
+<th>REPNE SCAS m8</th>
+<th>Find AL, starting at ES:[(E)DI]</th>
+</tr>
+</thead>
+</table>
 </li>
-<li>结构体内存图:<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-10-49-22.png" alt=""></li>
-</ul>
-</li>
-<li><p><span id="Example2">案例2</span>：</p>
-<ul>
-<li>结构体：<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> Test
-<span class="token punctuation">{</span>
-    <span class="token keyword">int</span> a<span class="token punctuation">;</span>
-    __int64 b<span class="token punctuation">;</span>
-    <span class="token keyword">char</span> c<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
-</li>
-<li>结构体内存图:<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-10-53-22.png" alt=""></li>
-</ul>
-</li>
-<li><p><span id="Example3">案例3</span>：</p>
-<ul>
-<li>结构体：<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> Test
-<span class="token punctuation">{</span>
-    <span class="token keyword">int</span> a<span class="token punctuation">;</span>
-    __int64 b<span class="token punctuation">;</span>
-    <span class="token keyword">char</span> c<span class="token punctuation">;</span>
-    <span class="token keyword">char</span> d<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
-</li>
-<li>结构体内存图:<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-10-59-38.png" alt=""></li>
-<li>解析： <ul>
-<li>VS2019默认对齐参数是8。</li>
-<li>根据原则四，sizeof(__int64) = 对齐参数，所以偏移量=8，那么b的其实位置是(a + 4), 因为a占四个字节，再加4个字节，偏移量就是8了。</li>
-<li>根据原则四，sizeof(char) &lt; 对齐参数，所以偏移量=1，所以c的其实位置是(b(8)后), 因为b占8个字节，偏移量已经超过1了。</li>
-<li>根据原则四，sizeof(char) &lt; 对齐参数，所以偏移量=1，所以d的其实位置是(c(1)后)，因为c占1个字节，偏移量就是1了。</li>
-</ul>
+<li><p>首先把地址给edi，然后ecx赋值为-1，al变为0（因为c的字符串都是以\0结尾的），然后查找字符串的个数并放在ecx里，ecx取反得到个数，最后因为字符串的\0也在其中，所以一般后面都有dec ecx。</p>
 </li>
 </ul>
 </li>
 </ul>
-<h1 id="5-补充"><a href="#5-补充" class="headerlink" title="5. 补充"></a>5. 补充</h1><ul>
-<li><p>结构体定义的时候，<strong>应该按照数据类型由小到大的顺序进行书写</strong>。这样最节约内存。</p>
+<h2 id="进入函数，判断参数是否为0"><a href="#进入函数，判断参数是否为0" class="headerlink" title="进入函数，判断参数是否为0"></a>进入函数，判断参数是否为0</h2><ul>
+<li><p>特征：</p>
+<pre><code>  test xxx,xxx
+  je xxx</code></pre></li>
+<li><p>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-15-27-15.png" alt=""></p>
 </li>
-<li><p>对齐参数的设置(#pragma pack):</p>
-<ul>
-<li><p>基本用法：</p>
-<pre><code>#pragma pack(n)
-结构体。。。
-#pragma pack()
-
-n为字节对齐数，其取值为1、2、4、8，默认是8。
-对齐参数如果比结构体成员的sizeof值小，该成员的偏移量应该以此值为准.也就是说，结构体成员的偏移量应该取二者的最小值</code></pre></li>
-<li><p>实例：</p>
-<ul>
-<li>结构体结构源码：<pre class=" language-c++"><code class="language-c++">#pragma pack(n)
-struct Test
-{
-    int a ;
-    __int64 b ;
-    char c ;
-};
-#pragma pack()
-</code></pre>
-</li>
-</ul>
-<p>```</p>
-<ul>
-<li>当n=8,即对齐参数为8<ul>
-<li>内存结构图：<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-11-10-24.png" alt=""></li>
-<li>解析：<ul>
-<li>根据原则四，sizeof(__int64) = 对齐参数，所以偏移量=8，那么b的其实位置是(a + 4), 因为a占四个字节，再加4个字节，偏移量就是8了。</li>
-<li>根据原则四，sizeof(char) &lt; 对齐参数，所以偏移量=1，所以c的其实位置是(b(8)后), 因为b占8个字节，偏移量已经超过1了。</li>
-<li>根据原则四，sizeof(char) &lt; 对齐参数，所以偏移量=1，所以d的其实位置是(c(1)后)，因为c占1个字节，偏移量就是1了。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>当n=4,即对齐参数为4<ul>
-<li>内存结构图：<br><img src="../../img/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90/%E7%BB%93%E6%9E%84%E4%BD%93%E5%AF%B9%E9%BD%90_2021-02-03-11-12-47.png" alt=""></li>
-<li>解析：<ul>
-<li>根据原则四，sizeof(__int64) &lt; 对齐参数4，所以偏移量=4，那么b的其实位置是(a(4)后), 因为a占四个字节，偏移量已经是4了。</li>
-<li>根据原则四，sizeof(char) &lt; 对齐参数4，所以偏移量=1，所以c的其实位置是(b(8)后), 因为b占8个字节，偏移量已经超过1了。</li>
-<li>根据原则四，sizeof(char) &lt; 对齐参数4，所以偏移量=1，所以d的其实位置是(c(1)后)，因为c占1个字节，偏移量就是1了。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<li><p>注意：这是编译器进行速度优化（/O2）后的写法，不优化版是直接使用cmp对比</p>
 </li>
 </ul>
 
@@ -611,7 +542,7 @@ struct Test
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://shanehan.tech/posts/6aac47f4/">http://shanehan.tech/posts/6aac47f4/</a>
+                    <a href="http://shanehan.tech/posts/7eee2e60/">http://shanehan.tech/posts/7eee2e60/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -649,12 +580,8 @@ struct Test
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/C-C/">
-                                    <span class="chip bg-color">C/C++</span>
-                                </a>
-                            
-                                <a href="/tags/Interview/">
-                                    <span class="chip bg-color">Interview</span>
+                                <a href="/tags/reversing/">
+                                    <span class="chip bg-color">reversing</span>
                                 </a>
                             
                         </div>
@@ -824,9 +751,10 @@ struct Test
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/posts/7eee2e60/">
                     <div class="card-image">
@@ -844,9 +772,9 @@ struct Test
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-02-03
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-03
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -859,6 +787,7 @@ struct Test
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -877,13 +806,13 @@ struct Test
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/posts/8d38ffae/">
+                <a href="/posts/6aac47f4/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="C++反汇编特征记录">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="结构体对齐">
                         
-                        <span class="card-title">C++反汇编特征记录</span>
+                        <span class="card-title">结构体对齐</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -894,7 +823,7 @@ struct Test
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-03
                             </span>
                         <span class="publish-author">
                             
@@ -911,12 +840,12 @@ struct Test
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/reversing/">
-                        <span class="chip bg-color">reversing</span>
-                    </a>
-                    
                     <a href="/tags/C-C/">
                         <span class="chip bg-color">C/C++</span>
+                    </a>
+                    
+                    <a href="/tags/Interview/">
+                        <span class="chip bg-color">Interview</span>
                     </a>
                     
                 </div>

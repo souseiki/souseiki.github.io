@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>常见反汇编代码块</title>
+      <link href="/posts/7eee2e60/"/>
+      <url>/posts/7eee2e60/</url>
+      
+        <content type="html"><![CDATA[<h1 id="计算字符串长度"><a href="#计算字符串长度" class="headerlink" title="计算字符串长度"></a>计算字符串长度</h1><ul><li><p>特征： <code>repne scas byte ptr es:[edi]</code></p></li><li><p>代码块：</p><pre class=" language-x86asm"><code class="language-x86asm">  00406930  /$  89FA          mov     edx, edi    ;备份edi  00406932  |.  89C7          mov     edi, eax    ;edi里为存放的字符串  00406934  |.  B9 FFFFFFFF   mov     ecx, -1     ;ecx放入-1，0xffff,最大值  00406939  |.  30C0          xor     al, al      ;al置0，字符串末尾就是0  0040693B  |.  F2:AE         repne   scas byte ptr es:[edi] ;从[edi]开始位置开始找al（遍历字符串），每循环一次cx-1  0040693D  |.  B8 FEFFFFFF   mov     eax, -2 ;由于cx末尾多减了一次，因此要用-2来减去得到真正的长度  00406942  |.  29C8          sub     eax, ecx  00406944  |.  89D7          mov     edi, edx    ;恢复edi</code></pre></li><li><p>代码块解释： </p><ul><li><p>repne命令：</p><table><thead><tr><th>REPNE SCAS m8</th><th>Find AL, starting at ES:[(E)DI]</th></tr></thead></table></li><li><p>首先把地址给edi，然后ecx赋值为-1，al变为0（因为c的字符串都是以\0结尾的），然后查找字符串的个数并放在ecx里，ecx取反得到个数，最后因为字符串的\0也在其中，所以一般后面都有dec ecx。</p></li></ul></li></ul><h2 id="进入函数，判断参数是否为0"><a href="#进入函数，判断参数是否为0" class="headerlink" title="进入函数，判断参数是否为0"></a>进入函数，判断参数是否为0</h2><ul><li><p>特征：</p><pre><code>  test xxx,xxx  je xxx</code></pre></li><li><p>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-15-27-15.png" alt=""></p></li><li><p>注意：这是编译器进行速度优化（/O2）后的写法，不优化版是直接使用cmp对比</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Reversing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> reversing </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>结构体对齐</title>
       <link href="/posts/6aac47f4/"/>
       <url>/posts/6aac47f4/</url>
