@@ -523,15 +523,15 @@ cmovcc xxx3, xxx4</code></pre></li>
 <li><p>实例：<br>  <img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-13-42.png" alt=""></p>
 </li>
 </ul>
-<h2 id="if-多分支语句优化版："><a href="#if-多分支语句优化版：" class="headerlink" title="if 多分支语句优化版："></a>if 多分支语句优化版：</h2><ul>
+<h2 id="2-4-if-多分支语句优化版："><a href="#2-4-if-多分支语句优化版：" class="headerlink" title="2.4 if 多分支语句优化版："></a>2.4 if 多分支语句优化版：</h2><ul>
 <li>特征： <ul>
 <li>使用test 代替cmp</li>
 <li>尽量削减分支</li>
 </ul>
 </li>
-<li>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-22-35.png" alt=""><h1 id="其他特征"><a href="#其他特征" class="headerlink" title="其他特征"></a>其他特征</h1></li>
+<li>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-22-35.png" alt=""></li>
 </ul>
-<h1 id="Switch语句"><a href="#Switch语句" class="headerlink" title="Switch语句"></a>Switch语句</h1><h2 id="switch只有三条分支无优化版"><a href="#switch只有三条分支无优化版" class="headerlink" title="switch只有三条分支无优化版"></a>switch只有三条分支无优化版</h2><ul>
+<h1 id="3-Switch语句"><a href="#3-Switch语句" class="headerlink" title="3 Switch语句"></a>3 Switch语句</h1><h2 id="3-1-switch只有三条分支无优化版"><a href="#3-1-switch只有三条分支无优化版" class="headerlink" title="3.1 switch只有三条分支无优化版"></a>3.1 switch只有三条分支无优化版</h2><ul>
 <li><p>特征：</p>
 <pre><code>  mov reg, mem；取出switch中考察的变量
   ；影响标志位的指令
@@ -552,11 +552,9 @@ cmovcc xxx3, xxx4</code></pre></li>
 </li>
 <li><p>注意：</p>
 <ul>
-<li>这种情况下switch和if…else if…else的区别。</li>
+<li>这种情况下switch和if…else if…else的区别。<h1 id="其他特征"><a href="#其他特征" class="headerlink" title="其他特征"></a>其他特征</h1><h2 id="1-进入函数，判断参数是否为0"><a href="#1-进入函数，判断参数是否为0" class="headerlink" title="1. 进入函数，判断参数是否为0"></a>1. 进入函数，判断参数是否为0</h2></li>
 </ul>
 </li>
-</ul>
-<h2 id="1-进入函数，判断参数是否为0"><a href="#1-进入函数，判断参数是否为0" class="headerlink" title="1. 进入函数，判断参数是否为0"></a>1. 进入函数，判断参数是否为0</h2><ul>
 <li><p>特征：</p>
 <pre><code>  test xxx,xxx
   je xxx</code></pre></li>
