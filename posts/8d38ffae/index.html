@@ -547,7 +547,7 @@ cmovcc xxx3, xxx4</code></pre></li>
 </li>
 <li>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-02-17-22-35.png" alt=""></li>
 </ul>
-<h1 id="3-Switch语句"><a href="#3-Switch语句" class="headerlink" title="3 Switch语句"></a>3 Switch语句</h1><h2 id="3-1-switch分支较少"><a href="#3-1-switch分支较少" class="headerlink" title="3.1 switch分支较少"></a>3.1 switch分支较少</h2><ul>
+<h1 id="3-Switch语句"><a href="#3-Switch语句" class="headerlink" title="3. Switch语句"></a>3. Switch语句</h1><h2 id="3-1-switch分支较少"><a href="#3-1-switch分支较少" class="headerlink" title="3.1 switch分支较少"></a>3.1 switch分支较少</h2><ul>
 <li><p>特征：三条分支或者更少的情况下（default算一条分支）性能与if else性能类似。</p>
 <pre><code>  mov reg, mem；取出switch中考察的变量
   cmp 或其他影响标志位的指令
@@ -596,15 +596,19 @@ cmovcc xxx3, xxx4</code></pre></li>
 </ul>
 </li>
 <li><p>实例：<br><img src="../../img/C-%E5%8F%8D%E6%B1%87%E7%BC%96/C-%E5%8F%8D%E6%B1%87%E7%BC%96_2021-02-03-15-28-46.png" alt=""></p>
+<h2 id="3-5-总结"><a href="#3-5-总结" class="headerlink" title="3.5 总结"></a>3.5 总结</h2></li>
+<li><p>何时生成大表？ 分支较多，且case的值连续。</p>
 </li>
-</ul>
-<h2 id="3-2-总结"><a href="#3-2-总结" class="headerlink" title="3.2 总结"></a>3.2 总结</h2><ul>
-<li>何时生成大表？ 分支较多，且case的值连续。</li>
-<li>case分支顺序打乱，观察顺序是否会影响生成大表？</li>
-<li>观察值较大时是否生成大表？值大小不影响，只要连续就行</li>
-<li>大表空缺位置的处理？填充default分支</li>
-<li>何时生成小表？ case值连续，但是中间空缺较多，比如case值是1,5,6,7 14</li>
-<li>Case值不连续？ switch变得与if-else差不多。</li>
+<li><p>case分支顺序打乱，观察顺序是否会影响生成大表？</p>
+</li>
+<li><p>观察值较大时是否生成大表？值大小不影响，只要连续就行</p>
+</li>
+<li><p>大表空缺位置的处理？填充default分支</p>
+</li>
+<li><p>何时生成小表？ case值连续，但是中间空缺较多，比如case值是1,5,6,7 14</p>
+</li>
+<li><p>Case值不连续？ switch变得与if-else差不多。</p>
+</li>
 </ul>
 
                 
@@ -984,7 +988,7 @@ cmovcc xxx3, xxx4</code></pre></li>
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
             collapseDepth: Number('0'),
-            headingSelector: 'h2, h3, h4'
+            headingSelector: 'h1, h2, h3'
         });
 
         // modify the toc link href to support Chinese.
@@ -996,7 +1000,7 @@ cmovcc xxx3, xxx4</code></pre></li>
 
         // modify the heading title id to support Chinese.
         i = 0;
-        $('#articleContent').children('h2, h3, h4').each(function () {
+        $('#articleContent').children('h1, h2, h3').each(function () {
             $(this).attr('id', tocHeading + (++i));
         });
 
