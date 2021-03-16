@@ -532,6 +532,27 @@
 </ul>
 </li>
 </ul>
+<h2 id="无人驾驶"><a href="#无人驾驶" class="headerlink" title="无人驾驶"></a>无人驾驶</h2><ul>
+<li>Planning<ul>
+<li>Idea1:<ul>
+<li>核心思路：将Apollo的规划模块(route和planning)抽取出来，形成一个零依赖，即插即用的规划模考，在适配其他平台（如autoware和apollo的时候，只需要添加通信层的适配）；</li>
+<li>具体实现：<ul>
+<li>先基于apollo的dreamware实现一套仿真平台，底层控制通过simlink连接carsim（<a href="https://developer.baidu.com/article.html#/articleDetailPage?id=290449" target="_blank" rel="noopener">参考实现</a>）</li>
+<li>给予上述平台，将apollo的算法抽取出来（openspace， latice和 qp规划）</li>
+<li>添加新算法</li>
+<li>适配其他平台</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Idea2: 基于GAN的路径生成</li>
+</ul>
+</li>
+<li>Prediction<ul>
+<li>TODO </li>
+</ul>
+</li>
+</ul>
 <h2 id="VScode"><a href="#VScode" class="headerlink" title="VScode"></a>VScode</h2><ul>
 <li><input disabled="" type="checkbox"> 常用插件系列</li>
 <li><input disabled="" type="checkbox"> 使用技巧系列</li>

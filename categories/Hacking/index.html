@@ -414,7 +414,20 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Hook是什么？Hook的作用如何进行Hook实例
+                                Hook是什么？Hook的作用
+监控函数：
+
+获取函数参数
+获取函数放回值
+
+
+改变函数的行为
+如何进行HookIAT Hook
+核心思想： 
+
+找到程序的IAT表
+将需要hook的函数在IAT表中的地址替换成自己的函数
+然后调用原来的函数
                             
                         </div>
                         <div class="publish-info">

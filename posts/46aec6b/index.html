@@ -477,7 +477,30 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Hook是什么？"><a href="#Hook是什么？" class="headerlink" title="Hook是什么？"></a>Hook是什么？</h1><h1 id="Hook的作用"><a href="#Hook的作用" class="headerlink" title="Hook的作用"></a>Hook的作用</h1><h1 id="如何进行Hook"><a href="#如何进行Hook" class="headerlink" title="如何进行Hook"></a>如何进行Hook</h1><h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1>
+                <h1 id="Hook是什么？"><a href="#Hook是什么？" class="headerlink" title="Hook是什么？"></a>Hook是什么？</h1><h1 id="Hook的作用"><a href="#Hook的作用" class="headerlink" title="Hook的作用"></a>Hook的作用</h1><ul>
+<li><p>监控函数：</p>
+<ul>
+<li>获取函数参数</li>
+<li>获取函数放回值</li>
+</ul>
+</li>
+<li><p>改变函数的行为</p>
+<h1 id="如何进行Hook"><a href="#如何进行Hook" class="headerlink" title="如何进行Hook"></a>如何进行Hook</h1><h2 id="IAT-Hook"><a href="#IAT-Hook" class="headerlink" title="IAT Hook"></a>IAT Hook</h2></li>
+<li><p>核心思想： </p>
+<ol>
+<li>找到程序的IAT表</li>
+<li>将需要hook的函数在IAT表中的地址替换成自己的函数</li>
+<li>然后调用原来的函数</li>
+</ol>
+</li>
+<li><p>IAT表的局限性： 有很多函数不存在IAT表中。比如：</p>
+<ul>
+<li>模块自己定义的函数</li>
+<li>利用LoadLibrary调用其他模考的函数<h2 id="Inline-Hook"><a href="#Inline-Hook" class="headerlink" title="Inline Hook"></a>Inline Hook</h2></li>
+</ul>
+</li>
+</ul>
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1>
                 
             </div>
             <hr/>
